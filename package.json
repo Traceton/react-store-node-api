@@ -4,6 +4,7 @@
   "description": "a node js restful api for my react-store project",
   "main": "index.js",
   "scripts": {
+    "productionServer": "node server.js",
     "devServer": "nodemon server.js"
   },
   "repository": {
@@ -23,7 +24,6 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "gridfs-stream": "^1.1.1",
     "method-override": "^3.0.0",
     "mongoose": "^5.10.6",
     "multer": "^1.4.2",

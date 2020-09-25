@@ -4,21 +4,9 @@ const server = express();
 const cors = require("cors");
 const inventoryItemsRouter = require("./routes/inventoryItems");
 const mongoose = require("mongoose");
-const database = mongoose.connection;
-
-mongoose.connect(process.env.DATABASE_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-database.on("error", (error) => {
-  console.error(error);
-});
-database.once("open", () => {
-  console.log(" react store api connected to database");
-});
 
 server.use(cors());
+server.use(express.json());
 server.use("/inventoryItems", inventoryItemsRouter);
 
 server.listen(process.env.PORT, () => {
