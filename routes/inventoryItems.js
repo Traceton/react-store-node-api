@@ -39,7 +39,11 @@ const storage = new GridFsStorage({
         if (err) {
           return reject(err);
         }
-        const filename = req.body.itemId;
+        const filename =
+          req.body.itemName +
+          req.body.itemCategory +
+          req.body.itemPrice +
+          req.body.itemsInStock;
         const fileInfo = {
           filename: filename,
           bucketName: "uploads",
