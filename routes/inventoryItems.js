@@ -4,25 +4,24 @@ const router = express();
 const path = require("path");
 const crypto = require("crypto");
 const multer = require("multer");
+const InventoryItem = require("../models/inventoryItem");
 const GridFsStorage = require("multer-gridfs-storage");
-
 const methodOverride = require("method-override");
 
 // database
 const mongoURI = process.env.DATABASE_URL;
-
 // connection
 const conn = mongoose.createConnection(mongoURI, {
   useUnifiedTopology: true,
   useNewUrlParser: true,
 });
 
+// init gfs
 let gfs;
 
 conn.on("error", (error) => {
   console.error(error);
 });
-
 conn.once("open", () => {
   console.log("router connection connected");
   // init gfs stream
@@ -40,7 +39,7 @@ const storage = new GridFsStorage({
         if (err) {
           return reject(err);
         }
-        const filename = buf.toString("hex") + path.extname(file.originalname);
+        const filename = req.body.itemId;
         const fileInfo = {
           filename: filename,
           bucketName: "uploads",
@@ -57,14 +56,41 @@ const upload = multer({ storage });
 
 // @route get /
 // @desc loads form
-router.get("/", (req, res) => {
-  res.send("hello");
+router.get("/", async (req, res) => {
+  const items = await InventoryItem.find();
+  try {
+    res.status(201).json(items);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 // @route post /upload
 // @desc uploads file to database
-router.post("/upload", upload.single("itemImage"), (req, res) => {
-  res.json({ file: req.file });
+router.post("/upload", upload.single("itemImage"), async (req, res) => {
+  const newInventoryItem = await new InventoryItem({
+    itemId: req.body.itemId,
+    itemName: req.body.itemName,
+    itemCategory: req.body.itemCategory,
+    itemDescription: req.body.itemDescription,
+    itemPrice: req.body.itemPrice,
+    itemPartNumber: req.body.itemPartNumber,
+    itemsInStock: req.body.itemsInStock,
+    itemLocation: req.body.itemLocation,
+    itemShippingDistance: req.body.itemShippingDistance,
+    itemYearCreated: req.body.itemYearCreated,
+    itemMake: req.body.itemMake,
+    itemModel: req.body.itemModel,
+  });
+
+  try {
+    newInventoryItem.save();
+    res.status(201).json(newInventoryItem);
+
+    // res.json({ file: req.file });
+  } catch (error) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
 // @route get /files
@@ -82,21 +108,34 @@ router.get("/files", (req, res) => {
 
 // @route get /files/:filename
 // @desc display file by filename
-// router.get("/files/:filename", (req, res) => {
-//   gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
-//     // check if file exist
-//     if (!file || file.length === 0) {
-//       return res.status(404).json({ err: "no file found" });
-//     }
-//     // files were found
-//     return res.status(201).json(file);
-//   });
-// });
+router.get("/files/:filename", (req, res) => {
+  gfs.find({ filename: req.params.filename }).toArray((err, files) => {
+    if (!files || files.length === 0) {
+      return res.status(404).json({ err: "file not found" });
+    }
+    res.status(201).json(files);
+  });
+});
+
+// @route get /images
+// @desc display all images
+router.get("/images", (req, res) => {
+  gfs.find().toArray((err, files) => {
+    // check if files exist
+    if (!files || files.length === 0) {
+      return res.status(404).json({ err: "no files found" });
+    }
+    // files were found
+    files.map((file) => {
+      return gfs.openDownloadStreamByName(file.filename).pipe(res);
+    });
+  });
+});
 
 // @route get /images/:filename
 // @desc display image by filename
 router.get("/images/:filename", (req, res) => {
-  const file = gfs
+  gfs
     .find({
       filename: req.params.filename,
     })
