@@ -121,6 +121,17 @@ router.get("/files/:filename", (req, res) => {
   });
 });
 
+// get all files by item category
+router.get("/items/:itemCategory", async (req, res) => {
+  const category = req.params.itemCategory;
+  const filteredItems = await InventoryItem.find({ itemCategory: category });
+  try {
+    res.status(201).json(filteredItems);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // @route get /images
 // @desc display all images
 router.get("/images", (req, res) => {
