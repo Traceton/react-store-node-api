@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express();
+const multer = require("multer");
+const upload = multer();
 const User = require("../models/user");
 
 // find user middleware function
@@ -35,7 +37,7 @@ router.get("/:id", findUser, (req, res) => {
   }
 });
 // create a single user
-router.post("/", async (req, res) => {
+router.post("/", upload.single(), async (req, res) => {
   let user = new User({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
