@@ -3,6 +3,8 @@ const express = require("express");
 const server = express();
 const cors = require("cors");
 const inventoryItemsRouter = require("./routes/inventoryItems");
+const usersRouter = require("./routes/users");
+
 const mongoose = require("mongoose");
 const database = mongoose.connection;
 
@@ -20,6 +22,7 @@ database.once("open", () => {
 server.use(cors());
 server.use(express.json());
 server.use("/inventoryItems", inventoryItemsRouter);
+server.use("/users", usersRouter);
 
 server.listen(process.env.PORT, () => {
   console.log(
