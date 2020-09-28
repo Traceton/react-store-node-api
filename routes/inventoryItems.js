@@ -39,11 +39,7 @@ const storage = new GridFsStorage({
         if (err) {
           return reject(err);
         }
-        const filename =
-          req.body.itemName +
-          req.body.itemCategory +
-          req.body.itemPrice +
-          req.body.itemsInStock;
+        const filename = Date.now() + req.body.itemPrice;
         const fileInfo = {
           filename: filename,
           bucketName: "uploads",
@@ -73,7 +69,7 @@ router.get("/", async (req, res) => {
 // @desc uploads file to database
 router.post("/upload", upload.single("itemImage"), async (req, res) => {
   const newInventoryItem = await new InventoryItem({
-    itemId: req.body.itemId,
+    itemId: Date.now() + req.body.itemPrice,
     itemName: req.body.itemName,
     itemCategory: req.body.itemCategory,
     itemDescription: req.body.itemDescription,
