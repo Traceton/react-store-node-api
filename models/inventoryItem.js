@@ -29,6 +29,7 @@ const inventoryItemSchema = new mongoose.Schema({
   itemsInStock: {
     type: Number,
     required: true,
+    default: 1,
   },
   itemLocation: {
     type: String,
