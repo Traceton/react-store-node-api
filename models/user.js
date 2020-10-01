@@ -17,9 +17,17 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  userId: {
+    type: String,
+    required: true,
+  },
   email: {
     type: String,
     required: false,
+  },
+  phone: {
+    type: String,
+    required: true,
   },
   createdOn: {
     type: Date,
