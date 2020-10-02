@@ -39,11 +39,13 @@ router.get("/:id", findUser, (req, res) => {
 // create a single user
 router.post("/", upload.single(), async (req, res) => {
   let user = new User({
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
     username: req.body.username,
     password: req.body.password,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
     email: req.body.email,
+    phone: req.body.phone,
+    userId: req.body.userId,
   });
   try {
     const newUser = await user.save();
