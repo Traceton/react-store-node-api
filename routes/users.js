@@ -36,6 +36,17 @@ router.get("/:id", findUser, (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+router.get("/login/:id", async (req, res) => {
+  const id = req.params.id;
+  const user = await User.find({ userId: id });
+  try {
+    res.status(201).json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // create a single user
 router.post("/", upload.single(), async (req, res) => {
   let user = new User({
