@@ -37,9 +37,10 @@ router.get("/:id", findUser, (req, res) => {
   }
 });
 
-router.get("/login/:id", async (req, res) => {
-  const id = req.params.id;
-  const user = await User.find({ userId: id });
+// get user by username
+router.get("/login/:username", async (req, res) => {
+  const username = req.params.username;
+  const user = await User.find({ username: username });
   try {
     res.status(201).json(user);
   } catch (error) {
