@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const router = express();
 const multer = require("multer");
 const upload = multer();
@@ -22,6 +23,7 @@ let findUserById = async (req, res, next) => {
 let findUserByUsername = async (req, res, next) => {
   let user;
   user = await User.find({ username: req.params.username });
+
   try {
     if (!user) {
       res.status(404).json({ message: "user not found" });
@@ -30,6 +32,7 @@ let findUserByUsername = async (req, res, next) => {
     res.status(500).json({ message: error.message });
   }
   res.user = user;
+
   next();
 };
 
@@ -114,7 +117,7 @@ router.patch("/:id", findUserById, async (req, res) => {
 
 // update a single user by username
 router.patch(
-  "/:username",
+  "/updateUser/:username",
   upload.single(),
   findUserByUsername,
   async (req, res) => {
@@ -134,7 +137,14 @@ router.patch(
       res.user.email = req.body.email;
     }
     try {
-      const updatedUser = await res.user.save();
+      console.log(req.body.username);
+      console.log(res.user);
+      const updatedUser = await res.user.save((err) => {
+        if (err) {
+          console.log(err);
+          return;
+        }
+      });
       res.status(201).json(updatedUser);
     } catch (error) {
       res.status(500).json({ message: error.message });
