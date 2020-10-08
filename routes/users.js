@@ -24,9 +24,6 @@ let findUserByUsername = async (req, res, next) => {
   let user;
 
   try {
-    // THIS CONDITIONAL SEARCH APPEARS TO ONLY BE A PROBLEM
-    // WHENEVER A PATCH REQUEST IS BEING USED
-    // WRONG USERNAME BEING USED FOR THE REQ.PARAMS
     user = await User.find({ username: req.params.username });
     if (!user) {
       res.status(404).json({ message: "user not found" });
@@ -37,10 +34,7 @@ let findUserByUsername = async (req, res, next) => {
     console.log(`error in findByUsername`);
   }
   res.user = user[0];
-  console.log(`user -> ${user}`);
-  console.log(req.params.username);
 
-  // NEXT IS COMMENTED OUT STILL
   next();
 };
 
@@ -146,7 +140,6 @@ router.patch(
     if (req.body.email != null) {
       res.user.email = req.body.email;
     }
-    console.log(`after patch -> ${res.user}`);
     try {
       const updatedUser = await res.user.save((err) => {
         if (err) {
@@ -154,7 +147,7 @@ router.patch(
           return;
         }
       });
-
+      console.log(updatedUser);
       res.status(201).json(updatedUser);
     } catch (error) {
       res.status(500).json({ message: error.message });
