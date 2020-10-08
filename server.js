@@ -21,7 +21,7 @@ database.once("open", () => {
 });
 
 server.use(cors());
-
+server.use(express.urlencoded({ extended: true }));
 server.use(express.json());
 server.use("/inventoryItems", inventoryItemsRouter);
 server.use("/users", usersRouter);
