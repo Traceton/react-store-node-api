@@ -27,11 +27,14 @@ let findUserByUsername = async (req, res, next) => {
   try {
     if (!user) {
       res.status(404).json({ message: "user not found" });
+      console.log(`user not found in findByUsername`);
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
+    console.log(`error in findByUsername`);
   }
-  res.user = user;
+
+  res.user = user[0];
 
   next();
 };
@@ -136,15 +139,15 @@ router.patch(
     if (req.body.email != null) {
       res.user.email = req.body.email;
     }
+    console.log(`patch -> ${res.user}`);
     try {
-      console.log(req.body.username);
-      console.log(res.user);
       const updatedUser = await res.user.save((err) => {
         if (err) {
           console.log(err);
           return;
         }
       });
+
       res.status(201).json(updatedUser);
     } catch (error) {
       res.status(500).json({ message: error.message });

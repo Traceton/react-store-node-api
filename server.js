@@ -6,6 +6,7 @@ const inventoryItemsRouter = require("./routes/inventoryItems");
 const usersRouter = require("./routes/users");
 
 const mongoose = require("mongoose");
+
 const database = mongoose.connection;
 
 mongoose.connect(process.env.DATABASE_URL, {
@@ -20,6 +21,7 @@ database.once("open", () => {
 });
 
 server.use(cors());
+
 server.use(express.json());
 server.use("/inventoryItems", inventoryItemsRouter);
 server.use("/users", usersRouter);
