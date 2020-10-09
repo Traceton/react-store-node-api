@@ -146,12 +146,13 @@ router.patch(
       res.user.phone = req.body.phone;
     }
     try {
-      const updatedUser = await res.user.save((err) => {
+      const updatedUser = await res.user.save((err, doc) => {
         if (err) {
           console.log(err);
           return;
+        } else if (doc) {
+          return res.status(201).json(res.user);
         }
-        return res.status(201).json(res.user);
       });
     } catch (error) {
       res.status(500).json({ message: error.message });
