@@ -28,12 +28,15 @@ let findUserByUsername = async (req, res, next) => {
     if (!user) {
       res.status(404).json({ message: "user not found" });
       console.log(`user not found in findByUsername`);
+      return;
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
     console.log(`error in findByUsername`);
   }
   res.user = user[0];
+  console.log(`req.params.username-> ${req.params.username}`);
+  console.log(`findbyusername res.user -> ${res.user}`);
 
   next();
 };
@@ -130,7 +133,6 @@ router.patch(
     if (req.body.lastName != null) {
       res.user.lastName = req.body.lastName;
     }
-    // not able to read the username from the res.user
     if (req.body.username != null) {
       res.user.username = req.body.username;
     }
@@ -140,15 +142,17 @@ router.patch(
     if (req.body.email != null) {
       res.user.email = req.body.email;
     }
+    if (req.body.phone != null) {
+      res.user.phone = req.body.phone;
+    }
     try {
       const updatedUser = await res.user.save((err) => {
         if (err) {
           console.log(err);
           return;
         }
+        return res.status(201).json(updatedUser);
       });
-      console.log(updatedUser);
-      res.status(201).json(updatedUser);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
