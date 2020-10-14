@@ -61,7 +61,6 @@ router.get("/login/publicProfile/:username", findUserByUsername, (req, res) => {
     email: res.user.email,
     phone: res.user.phone,
   };
-
   try {
     res.status(201).json(publicProfile);
   } catch (error) {
@@ -101,14 +100,18 @@ router.post("/", upload.single(), async (req, res) => {
   }
 });
 // // delete a single user
-router.delete("/:username", findUserByUsername, async (req, res) => {
-  try {
-    await res.user.remove();
-    res.status(201).json({ message: "user was deleted" });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+router.delete(
+  "/delete/:username/:password",
+  verifyUserByUsernameAndPassword,
+  async (req, res) => {
+    try {
+      await res.user.remove();
+      res.status(201).json({ message: "user was deleted" });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
   }
-});
+);
 
 // update a single user by username
 router.patch(
