@@ -51,6 +51,12 @@ let verifyUserByUsernameAndPassword = async (req, res, next) => {
   next();
 };
 
+// check if user account already exists,
+// let checkIfUserExists = async (req, res, next) => {
+//   let user =
+//   next();
+// };
+
 // this call should only return public contact info.
 // get public info user by username
 router.get("/login/publicProfile/:username", findUserByUsername, (req, res) => {
@@ -93,8 +99,17 @@ router.post("/", upload.single(), async (req, res) => {
     userId: req.body.userId,
   });
   try {
-    const newUser = await user.save();
-    res.status(201).json(newUser);
+    let userWithEmailAlready = User.find({ email: req.body.email });
+    let userWithUsernameAlready = User.find({ username: req.body.username });
+
+    if (!userWithEmailAlready && !userWithUsernameAlready) {
+      const newUser = await user.save();
+      res.status(201).json(newUser);
+    } else if (userWithEmailAlready) {
+      res.status(500).json("Account with that email already exists");
+    } else if (userWithUsernameAlready) {
+      res.status(500).json("Account with that username already exists");
+    }
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
