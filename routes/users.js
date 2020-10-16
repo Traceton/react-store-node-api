@@ -20,7 +20,6 @@ let findUserByUsername = async (req, res, next) => {
   res.user = user[0];
   console.log(`req.params.username-> ${req.params.username}`);
   console.log(`findbyusername res.user -> ${res.user}`);
-
   next();
 };
 
@@ -52,10 +51,32 @@ let verifyUserByUsernameAndPassword = async (req, res, next) => {
 };
 
 // check if user account already exists,
-// let checkIfUserExists = async (req, res, next) => {
-//   let user =
-//   next();
-// };
+let checkIfUserExists = async (req, res, next) => {
+  // console.log(req.body);
+  let userWithUsernameAlready;
+  let userWithEmailAlready;
+  userWithUsernameAlready = await User.find({ username: req.body.username });
+  userWithEmailAlready = await User.find({
+    email: req.body.email,
+  });
+
+  if (userWithUsernameAlready.length >= 1 || userWithEmailAlready.length >= 1) {
+    console.log("username or email already exists");
+  } else {
+    res.user = await new User({
+      username: req.body.username,
+      password: req.body.password,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      phone: req.body.phone,
+      userId: req.body.userId,
+    });
+  }
+
+  // STILL WORKING ON THIS FUNCTION AND VERIFYING IF THE ACCOUNT EXISTS ALREADY OR NOT
+  next();
+};
 
 // this call should only return public contact info.
 // get public info user by username
@@ -88,28 +109,11 @@ router.get(
 );
 
 // create a single user
-router.post("/", upload.single(), async (req, res) => {
-  let user = new User({
-    username: req.body.username,
-    password: req.body.password,
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    email: req.body.email,
-    phone: req.body.phone,
-    userId: req.body.userId,
-  });
+router.post("/", upload.single(), checkIfUserExists, async (req, res) => {
+  // make sure the account doesnt already exist here.
   try {
-    let userWithEmailAlready = User.find({ email: req.body.email });
-    let userWithUsernameAlready = User.find({ username: req.body.username });
-
-    if (!userWithEmailAlready && !userWithUsernameAlready) {
-      const newUser = await user.save();
-      res.status(201).json(newUser);
-    } else if (userWithEmailAlready) {
-      res.status(500).json("Account with that email already exists");
-    } else if (userWithUsernameAlready) {
-      res.status(500).json("Account with that username already exists");
-    }
+    const newUser = await res.user.save();
+    res.status(201).json(newUser);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
