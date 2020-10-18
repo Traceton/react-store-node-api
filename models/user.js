@@ -34,6 +34,23 @@ const userSchema = new mongoose.Schema({
     required: true,
     default: Date.now(),
   },
+  // updated below
+  streetAddress: {
+    type: String,
+    required: false,
+  },
+  city: {
+    type: String,
+    required: false,
+  },
+  state: {
+    type: String,
+    required: false,
+  },
+  zipCode: {
+    type: String,
+    required: false,
+  },
 });
 
 module.exports = mongoose.model("user", userSchema);
