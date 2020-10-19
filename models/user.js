@@ -12,14 +12,17 @@ const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
     required: false,
+    default: "none",
   },
   lastName: {
     type: String,
     required: false,
+    default: "none",
   },
   email: {
     type: String,
     required: false,
+    default: "none",
   },
   phone: {
     type: Number,
@@ -38,18 +41,42 @@ const userSchema = new mongoose.Schema({
   streetAddress: {
     type: String,
     required: false,
+    default: "none",
   },
   city: {
     type: String,
     required: false,
+    default: "none",
   },
   state: {
     type: String,
     required: false,
+    default: "none",
   },
   zipCode: {
     type: String,
     required: false,
+    default: "none",
+  },
+  storeListings: {
+    type: Number,
+    required: false,
+    default: 0,
+  },
+  messageInbox: {
+    type: String,
+    required: false,
+    default: "none",
+  },
+  profilePreferences: {
+    type: String,
+    required: false,
+    default: "none",
+  },
+  userBio: {
+    type: String,
+    required: false,
+    default: "none",
   },
 });
 

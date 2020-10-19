@@ -71,6 +71,14 @@ let checkIfUserExists = async (req, res, next) => {
       email: req.body.email,
       phone: req.body.phone,
       userId: req.body.userId,
+      streetId: req.body.streetId,
+      city: req.body.city,
+      state: req.body.state,
+      zipCode: req.body.zipCode,
+      storeListings: req.body.storeListings,
+      messageInbox: req.body.messageInbox,
+      profilePreferences: req.body.profilePreferences,
+      userBio: req.body.userBio,
     });
   }
 
@@ -155,6 +163,27 @@ router.patch(
     }
     if (req.body.phone != null) {
       res.user.phone = req.body.phone;
+    }
+    if (req.body.streetAddress != null) {
+      res.user.streetAddress = req.body.streetAddress;
+    }
+    if (req.body.city != null) {
+      res.user.city = req.body.city;
+    }
+    if (req.body.zipCode != null) {
+      res.user.zipCode = req.body.zipCode;
+    }
+    if (req.body.storeListings != null) {
+      res.user.storeListings = req.body.storeListings;
+    }
+    if (req.body.messageInbox != null) {
+      res.user.messageInbox = req.body.messageInbox;
+    }
+    if (req.body.profilePreferences != null) {
+      res.user.profilePreferences = req.body.profilePreferences;
+    }
+    if (req.body.userBio != null) {
+      res.user.userBio = req.body.userBio;
     }
     try {
       const updatedUser = await res.user.save((err, doc) => {
