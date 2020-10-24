@@ -26,7 +26,7 @@ conn.once("open", () => {
   console.log("user router connection connected");
   // init gfs stream
   gfs = new mongoose.mongo.GridFSBucket(conn.db, {
-    bucketName: "uploads",
+    bucketName: "profilePics",
   });
 });
 
@@ -257,6 +257,20 @@ router.patch(
   }
 );
 
+// @route get /profilePics/:userId
+// @desc display profile picture found by user id
+router.get("/profilePics/:userId", (req, res) => {
+  gfs.find({ filename: req.params.userId }).toArray((err, files) => {
+    // check if files exist
+    if (!files || files.length === 0) {
+      return res.status(404).json({ err: "no files found" });
+    }
+    // files were found
+    files.map((file) => {
+      return gfs.openDownloadStreamByName(file.filename).pipe(res);
+    });
+  });
+});
 // find user middleware function
 // let findUserById = async (req, res, next) => {
 //   let user;
@@ -314,5 +328,5 @@ router.patch(
 //     res.status(500).json({ message: error.message });
 //   }
 // });
-
+router.use(methodOverride("_method"));
 module.exports = router;
