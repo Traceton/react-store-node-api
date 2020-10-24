@@ -1,8 +1,60 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const router = express();
+const path = require("path");
+const crypto = require("crypto");
 const multer = require("multer");
-const upload = multer();
 const User = require("../models/user");
+const GridFsStorage = require("multer-gridfs-storage");
+const methodOverride = require("method-override");
+
+// database
+const mongoURI = process.env.DATABASE_URL;
+// connection
+const conn = mongoose.createConnection(mongoURI, {
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+});
+
+// init gfs
+let gfs;
+
+conn.on("error", (error) => {
+  console.error(error);
+});
+conn.once("open", () => {
+  console.log("user router connection connected");
+  // init gfs stream
+  gfs = new mongoose.mongo.GridFSBucket(conn.db, {
+    bucketName: "uploads",
+  });
+});
+
+// create storage engine
+const storage = new GridFsStorage({
+  url: mongoURI,
+  file: (req, file) => {
+    return new Promise((resolve, reject) => {
+      crypto.randomBytes(16, (err, buf) => {
+        if (err) {
+          return reject(err);
+        }
+        const filename = req.body.userId;
+        const fileInfo = {
+          filename: filename,
+          bucketName: "profilePics",
+        };
+        resolve(fileInfo);
+      });
+    });
+  },
+  options: {
+    useUnifiedTopology: true,
+  },
+});
+const upload = multer({ storage });
+
+// new above
 
 let findUserByUsername = async (req, res, next) => {
   let user;
@@ -117,15 +169,20 @@ router.get(
 );
 
 // create a single user
-router.post("/", upload.single(), checkIfUserExists, async (req, res) => {
-  // make sure the account doesnt already exist here.
-  try {
-    const newUser = await res.user.save();
-    res.status(201).json(newUser);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+router.post(
+  "/",
+  upload.single("profilePic"),
+  checkIfUserExists,
+  async (req, res) => {
+    // make sure the account doesnt already exist here.
+    try {
+      const newUser = await res.user.save();
+      res.status(201).json(newUser);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
   }
-});
+);
 // // delete a single user
 router.delete(
   "/delete/:username/:password",

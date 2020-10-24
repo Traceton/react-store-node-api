@@ -23,7 +23,7 @@ conn.on("error", (error) => {
   console.error(error);
 });
 conn.once("open", () => {
-  console.log("router connection connected");
+  console.log("inventory item router connection connected");
   // init gfs stream
   gfs = new mongoose.mongo.GridFSBucket(conn.db, {
     bucketName: "uploads",
