@@ -197,8 +197,14 @@ router.delete(
   }
 );
 
-router.delete("/deleteProfilePic/:userId", (req, res) => {
-  gfs.delete({ filename: req.params.userId });
+router.delete("/deleteProfilePic/:userId", async (req, res) => {
+  try {
+    await gfs.delete({ filename: req.params.userId });
+    res.status(201).json("file deleted");
+  } catch (error) {
+    res.status(500).json("file couldnt be deleted");
+  }
+
   // gfs.find({ filename: req.params.userId }).toArray((err, files) => {
   //   // check if files exist
   //   if (!files || files.length === 0) {
