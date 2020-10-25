@@ -197,29 +197,25 @@ router.delete(
   }
 );
 
-// router.delete("/deleteProfilePic/:userId", async (req, res) => {
-//   //
-//   try {
-//     gfs.find({ filename: req.params.userId }).toArray((err, files) => {
-//       // check if files exist
-//       if (!files || files.length === 0) {
-//         return res.status(404).json({ err: "no files found" });
-//       } else {
-//         let id = files[0]._id;
-//         console.log(id);
-//         gfs.delete({ id }, function (err) {
-//           if (err) {
-//             console.log("error");
-//           } else {
-//             console.log("old file removed");
-//           }
-//         });
-//       }
-//     });
-//   } catch (error) {
-//     res.status(500).json("couldnt delete");
-//   }
-// });
+router.delete("/deleteProfilePic/:userId", async (req, res) => {
+  //
+  try {
+    gfs.find({ filename: req.params.userId }).toArray((err, files) => {
+      // check if files exist
+      if (!files || files.length === 0) {
+        return res.status(404).json({ err: "no files found" });
+      } else {
+        let id = files[0]._id;
+        // console.log(files[0]);
+        const obj_id = new mongoose.Types.ObjectId(id);
+        gfs.delete(obj_id);
+        res.status(201).json("Profile picture deleted");
+      }
+    });
+  } catch (error) {
+    res.status(500).json("couldnt delete");
+  }
+});
 
 // update a single user by username
 router.patch(
