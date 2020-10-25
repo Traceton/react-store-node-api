@@ -201,7 +201,7 @@ router.delete(
 router.patch(
   "/updateUser/:username",
   findUserByUsername,
-  upload.none(),
+  upload.single("profilePic"),
   async (req, res) => {
     if (req.body.firstName != null) {
       res.user.firstName = req.body.firstName;
