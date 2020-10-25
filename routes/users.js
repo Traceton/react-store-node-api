@@ -197,6 +197,17 @@ router.delete(
   }
 );
 
+router.delete("/deleteProfilePic/:userId", (req, res) => {
+  gfs.find({ filename: req.params.userId }).toArray((err, files) => {
+    // check if files exist
+    if (!files || files.length === 0) {
+      return res.status(404).json({ err: "no files found" });
+    } else {
+      gfs.delete({ filename: req.params.userId });
+    }
+  });
+});
+
 // update a single user by username
 router.patch(
   "/updateUser/:username",
