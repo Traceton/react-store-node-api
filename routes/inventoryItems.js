@@ -73,27 +73,29 @@ router.post(
   upload.single("itemImage"),
   async (req, res) => {
     const user = await User.find({ userId: req.params.userId });
-    if (user && user.password === req.params.password) {
-      const newInventoryItem = await new InventoryItem({
-        itemId: req.params.userId,
-        itemName: req.body.itemName,
-        itemCategory: req.body.itemCategory,
-        itemDescription: req.body.itemDescription,
-        itemPrice: req.body.itemPrice,
-        itemPartNumber: req.body.itemPartNumber,
-        itemsInStock: req.body.itemsInStock,
-        itemLocation: req.body.itemLocation,
-        itemShippingDistance: req.body.itemShippingDistance,
-        itemYearCreated: req.body.itemYearCreated,
-        itemMake: req.body.itemMake,
-        itemModel: req.body.itemModel,
-      });
-    } else {
-      return console.log("password or user id incorrect");
-    }
+    const newInventoryItem = await new InventoryItem({
+      itemId: req.params.userId,
+      itemName: req.body.itemName,
+      itemCategory: req.body.itemCategory,
+      itemDescription: req.body.itemDescription,
+      itemPrice: req.body.itemPrice,
+      itemPartNumber: req.body.itemPartNumber,
+      itemsInStock: req.body.itemsInStock,
+      itemLocation: req.body.itemLocation,
+      itemShippingDistance: req.body.itemShippingDistance,
+      itemYearCreated: req.body.itemYearCreated,
+      itemMake: req.body.itemMake,
+      itemModel: req.body.itemModel,
+    });
+
     try {
-      newInventoryItem.save();
-      res.status(201).json(newInventoryItem);
+      if (user[0] && user[0].password == req.params.password) {
+        console.log(newInventoryItem);
+        newInventoryItem.save();
+        res.status(201).json(newInventoryItem);
+      } else {
+        return console.log("password or user id incorrect");
+      }
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
