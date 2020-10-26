@@ -5,6 +5,7 @@ const path = require("path");
 const crypto = require("crypto");
 const multer = require("multer");
 const InventoryItem = require("../models/inventoryItem");
+const User = require("../models/user");
 const GridFsStorage = require("multer-gridfs-storage");
 const methodOverride = require("method-override");
 
@@ -64,6 +65,38 @@ router.get("/", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// BELOW CURRENTLY FINDS THE USER, NOW TO AUTHENTICATE IF USERS INFO IS CORRECT.
+
+router.post(
+  "/createNewItem/:userId/:password",
+  upload.single("itemImage"),
+  async (req, res) => {
+    const user = await User.find({ userId: req.params.userId });
+    if (user) {
+      const newInventoryItem = await new InventoryItem({
+        itemId: req.params.userId,
+        itemName: req.body.itemName,
+        itemCategory: req.body.itemCategory,
+        itemDescription: req.body.itemDescription,
+        itemPrice: req.body.itemPrice,
+        itemPartNumber: req.body.itemPartNumber,
+        itemsInStock: req.body.itemsInStock,
+        itemLocation: req.body.itemLocation,
+        itemShippingDistance: req.body.itemShippingDistance,
+        itemYearCreated: req.body.itemYearCreated,
+        itemMake: req.body.itemMake,
+        itemModel: req.body.itemModel,
+      });
+    }
+    try {
+      newInventoryItem.save();
+      res.status(201).json(newInventoryItem);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+);
 
 // @route post /upload
 // @desc uploads file to database
