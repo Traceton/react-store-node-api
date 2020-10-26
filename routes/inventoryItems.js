@@ -73,7 +73,7 @@ router.post(
   upload.single("itemImage"),
   async (req, res) => {
     const user = await User.find({ userId: req.params.userId });
-    if (user) {
+    if (user && user.password === req.params.password) {
       const newInventoryItem = await new InventoryItem({
         itemId: req.params.userId,
         itemName: req.body.itemName,
@@ -88,6 +88,8 @@ router.post(
         itemMake: req.body.itemMake,
         itemModel: req.body.itemModel,
       });
+    } else {
+      return console.log("password or user id incorrect");
     }
     try {
       newInventoryItem.save();
