@@ -74,7 +74,7 @@ router.post(
   async (req, res) => {
     const user = await User.find({ userId: req.params.userId });
     const newInventoryItem = await new InventoryItem({
-      itemId: req.params.itemId,
+      itemId: req.body.itemId,
       itemName: req.body.itemName,
       itemCategory: req.body.itemCategory,
       itemDescription: req.body.itemDescription,
