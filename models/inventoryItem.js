@@ -5,6 +5,10 @@ const inventoryItemSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  itemUserId: {
+    type: String,
+    required: true,
+  },
   itemName: {
     type: String,
     required: true,
