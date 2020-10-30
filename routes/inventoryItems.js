@@ -66,8 +66,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// BELOW CURRENTLY FINDS THE USER, NOW TO AUTHENTICATE IF USERS INFO IS CORRECT.
-
 router.post(
   "/createNewItem/:userId/:password",
   upload.single("itemImage"),
@@ -160,6 +158,17 @@ router.get("/files/:filename", (req, res) => {
 router.get("/items/:itemCategory", async (req, res) => {
   const category = req.params.itemCategory;
   const filteredItems = await InventoryItem.find({ itemCategory: category });
+  try {
+    res.status(201).json(filteredItems);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// get all files by user id
+router.get("/findOwnUserItems/:itemUserId", async (req, res) => {
+  const itemUserId = req.params.itemUserId;
+  const filteredItems = await InventoryItem.find({ itemUserId: itemUserId });
   try {
     res.status(201).json(filteredItems);
   } catch (error) {

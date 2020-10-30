@@ -54,8 +54,6 @@ const storage = new GridFsStorage({
 });
 const upload = multer({ storage });
 
-// new above
-
 let findUserByUsername = async (req, res, next) => {
   let user;
   try {
