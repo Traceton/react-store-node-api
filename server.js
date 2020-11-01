@@ -4,6 +4,7 @@ const server = express();
 const cors = require("cors");
 const inventoryItemsRouter = require("./routes/inventoryItems");
 const usersRouter = require("./routes/users");
+const messagesRouter = require("./routes/messages");
 
 const mongoose = require("mongoose");
 
@@ -25,6 +26,7 @@ server.use(express.urlencoded({ extended: true }));
 server.use(express.json());
 server.use("/inventoryItems", inventoryItemsRouter);
 server.use("/users", usersRouter);
+server.use("/messages", messagesRouter);
 
 server.listen(process.env.PORT, () => {
   console.log(

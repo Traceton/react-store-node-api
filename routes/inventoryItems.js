@@ -165,7 +165,7 @@ router.get("/items/:itemCategory", async (req, res) => {
   }
 });
 
-// to be used when the user views their own account and their own listed items should be displayed.
+// to be used when the user views their own account and their own listed items should be dispo
 // get all files by user id
 router.get("/findOwnUserItems/:itemUserId", async (req, res) => {
   const itemUserId = req.params.itemUserId;
