@@ -14,6 +14,12 @@ router.get("/", async (req, res) => {
   }
 });
 
+// finish making this get request to get all messages by order
+router.get(
+  "/getPreviousMessages/:senderUserId/:recieverUserId",
+  async (req, res) => {}
+);
+
 router.post(
   "/sendNewMessage/:senderUserId/:recieverUserId",
   async (req, res) => {
