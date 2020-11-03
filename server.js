@@ -5,7 +5,7 @@ const cors = require("cors");
 const inventoryItemsRouter = require("./routes/inventoryItems");
 const usersRouter = require("./routes/users");
 const messagesRouter = require("./routes/messages");
-
+// test comment, force rebuild
 const mongoose = require("mongoose");
 
 const database = mongoose.connection;
