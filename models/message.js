@@ -17,6 +17,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  messageId: {
+    type: Number,
+    required: true,
+    default: Math.random() + Math.random(),
+  },
   createdOn: {
     type: Date,
     required: true,
