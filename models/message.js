@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   messageId: {
-    type: Date,
+    type: Number,
     required: true,
     default: Date.now(),
   },

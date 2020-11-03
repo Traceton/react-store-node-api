@@ -42,6 +42,7 @@ router.post(
       recieverUserId: req.params.recieverUserId,
       itemId: req.body.itemId,
       messageBody: req.body.messageBody,
+      messageId: req.body.messageId,
     });
     try {
       const newMessage = message.save();
