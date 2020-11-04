@@ -53,7 +53,10 @@ const storage = new GridFsStorage({
     useUnifiedTopology: true,
   },
 });
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+  limits: { fileSize: process.env.MAX_UPLOAD_FILESIZE },
+});
 
 // @route get /
 // @desc loads form
