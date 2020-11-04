@@ -73,6 +73,7 @@ let findUserByUsername = async (req, res, next) => {
 
 let verifyUserByUsernameAndPassword = async (req, res, next) => {
   let user;
+
   try {
     user = await User.find({ username: req.params.username });
     if (!user) {
@@ -91,10 +92,6 @@ let verifyUserByUsernameAndPassword = async (req, res, next) => {
     res.status(500).json({ message: error.message });
     console.log(`error in findByUsername`);
   }
-
-  console.log(`req.params.username-> ${req.params.username}`);
-  console.log(`findbyusername res.user -> ${res.user}`);
-
   next();
 };
 
@@ -276,17 +273,21 @@ router.patch(
 // @route get /profilePics/:userId
 // @desc display profile picture found by user id
 router.get("/profilePics/:userId", (req, res) => {
+  console.log(" user request recieved");
   gfs.find({ filename: req.params.userId }).toArray((err, files) => {
     // check if files exist
     if (!files || files.length === 0) {
       return res.status(404).json({ err: "no files found" });
     }
     // files were found
-    files.map((file) => {
-      return gfs.openDownloadStreamByName(file.filename).pipe(res);
+    console.log("user image found");
+    files.map(async (file) => {
+      await gfs.openDownloadStreamByName(file.filename).pipe(res);
+      return console.log("user image returned");
     });
   });
 });
+
 // find user middleware function
 // let findUserById = async (req, res, next) => {
 //   let user;
