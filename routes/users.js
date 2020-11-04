@@ -68,8 +68,6 @@ let findUserByUsername = async (req, res, next) => {
     console.log(`error in findByUsername`);
   }
   res.user = user[0];
-  console.log(`req.params.username-> ${req.params.username}`);
-  console.log(`findbyusername res.user -> ${res.user}`);
   next();
 };
 

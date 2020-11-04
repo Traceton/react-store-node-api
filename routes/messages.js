@@ -16,12 +16,12 @@ router.get("/", async (req, res) => {
 
 // finish making this get request to get all messages by order
 router.get(
-  "/getPreviousMessages/:senderUserId/:recieverUserId/:itemId",
+  "/getPreviousMessages/:senderUserId/:recieverUserId",
   async (req, res) => {
     const messages = await Message.find({
       senderUserId: req.params.senderUserId,
       recieverUserId: req.params.recieverUserId,
-      itemId: req.params.itemId,
+      // itemId: req.params.itemId,
     });
     try {
       if (messages) {
