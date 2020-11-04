@@ -52,7 +52,11 @@ const storage = new GridFsStorage({
     useUnifiedTopology: true,
   },
 });
-const upload = multer({ storage });
+// TESTING MAX FILE SIZE FOR MULTER UPLOADS, TESTING.
+const upload = multer({
+  storage,
+  limits: { fileSize: process.env.MAX_UPLOAD_FILESIZE },
+});
 
 let findUserByUsername = async (req, res, next) => {
   let user;
