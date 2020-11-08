@@ -7,6 +7,7 @@ const multer = require("multer");
 const User = require("../models/user");
 const GridFsStorage = require("multer-gridfs-storage");
 const methodOverride = require("method-override");
+const fileSizeLimit = 500000;
 
 // database
 const mongoURI = process.env.DATABASE_URL;
@@ -54,8 +55,8 @@ const storage = new GridFsStorage({
 });
 // TESTING MAX FILE SIZE FOR MULTER UPLOADS, TESTING.
 const upload = multer({
-  storage,
-  limits: { fileSize: process.env.MAX_UPLOAD_FILESIZE },
+  storage: storage,
+  limits: { fileSize: fileSizeLimit },
 });
 
 let findUserByUsername = async (req, res, next) => {
@@ -172,6 +173,7 @@ router.post(
   checkIfUserExists,
   async (req, res) => {
     // make sure the account doesnt already exist here.
+    console.log(req.file.size);
     try {
       const newUser = await res.user.save();
       res.status(201).json(newUser);
@@ -259,6 +261,7 @@ router.patch(
     if (req.body.userBio != null) {
       res.user.userBio = req.body.userBio;
     }
+    console.log(req.file.size);
     try {
       const updatedUser = await res.user.save((err, doc) => {
         if (err) {
@@ -284,10 +287,17 @@ router.get("/profilePics/:userId", (req, res) => {
       return res.status(404).json({ err: "no files found" });
     }
     // files were found
+    let gotData = false;
     console.log("user image found");
     files.map(async (file) => {
-      await gfs.openDownloadStreamByName(file.filename).pipe(res);
-      return console.log("user image returned");
+      let downloadStream = await gfs
+        .openDownloadStreamByName(file.filename)
+        .pipe(res);
+      // return console.log("user image returned");
+      downloadStream.on("end", () => {
+        test.ok(gotData);
+        console.log("stream ended.");
+      });
     });
   });
 });
