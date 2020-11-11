@@ -261,7 +261,7 @@ router.patch(
     if (req.body.userBio != null) {
       res.user.userBio = req.body.userBio;
     }
-    console.log(req.file.size);
+    // console.log(req.file.size);
     try {
       const updatedUser = await res.user.save((err, doc) => {
         if (err) {
