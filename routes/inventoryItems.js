@@ -8,6 +8,7 @@ const InventoryItem = require("../models/inventoryItem");
 const User = require("../models/user");
 const GridFsStorage = require("multer-gridfs-storage");
 const methodOverride = require("method-override");
+const fileSizeLimit = 800000;
 
 // database
 const mongoURI = process.env.DATABASE_URL;
