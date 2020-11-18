@@ -8,7 +8,7 @@ const InventoryItem = require("../models/inventoryItem");
 const User = require("../models/user");
 const GridFsStorage = require("multer-gridfs-storage");
 const methodOverride = require("method-override");
-const fileSizeLimit = 15000000000000;
+const fileSizeLimit = 10000000;
 
 // database
 const mongoURI = process.env.DATABASE_URL;
@@ -199,16 +199,20 @@ router.get("/images", (req, res) => {
 // @route get /images/:filename
 // @desc display image by filename
 router.get("/images/:filename", (req, res) => {
-  gfs
-    .find({
-      filename: req.params.filename,
-    })
-    .toArray((err, files) => {
-      if (!files || files.length === 0) {
-        return res.status(404).json("could not find image");
-      }
-      gfs.openDownloadStreamByName(req.params.filename).pipe(res);
-    });
+  try {
+    gfs
+      .find({
+        filename: req.params.filename,
+      })
+      .toArray((err, files) => {
+        if (!files || files.length === 0) {
+          return res.status(404).json("could not find image");
+        }
+        gfs.openDownloadStreamByName(req.params.filename).pipe(res);
+      });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
 router.use(methodOverride("_method"));

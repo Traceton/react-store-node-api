@@ -7,7 +7,7 @@ const multer = require("multer");
 const User = require("../models/user");
 const GridFsStorage = require("multer-gridfs-storage");
 const methodOverride = require("method-override");
-const fileSizeLimit = 800000;
+const fileSizeLimit = 10000000;
 
 // database
 const mongoURI = process.env.DATABASE_URL;
