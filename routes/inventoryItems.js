@@ -28,7 +28,7 @@ conn.once("open", () => {
   console.log("inventory item router connection connected");
   // init gfs stream
   gfs = new mongoose.mongo.GridFSBucket(conn.db, {
-    bucketName: "uploads",
+    bucketName: "inventoryItemPhotos",
   });
 });
 
@@ -44,7 +44,7 @@ const storage = new GridFsStorage({
         const filename = req.body.itemId;
         const fileInfo = {
           filename: filename,
-          bucketName: "uploads",
+          bucketName: "inventoryItemPhotos",
         };
         resolve(fileInfo);
       });
@@ -205,7 +205,7 @@ router.get("/images/:filename", (req, res) => {
     })
     .toArray((err, files) => {
       if (!files || files.length === 0) {
-        return res.status(404).json({ err: "file not found" });
+        return res.status(404).json("could not find image");
       }
       gfs.openDownloadStreamByName(req.params.filename).pipe(res);
     });
