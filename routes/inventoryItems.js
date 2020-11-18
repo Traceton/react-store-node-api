@@ -56,7 +56,7 @@ const storage = new GridFsStorage({
 });
 const upload = multer({
   storage,
-  limits: { fileSize: process.env.MAX_UPLOAD_FILESIZE },
+  limits: { fileSize: fileSizeLimit },
 });
 
 // @route get /
