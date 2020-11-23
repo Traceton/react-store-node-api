@@ -14,7 +14,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:itemId", async (req, res) => {
+router.get("/getAllMessagesWithItemId/:itemId", async (req, res) => {
   const messages = await Message.find({ itemId: req.params.itemId });
   try {
     if (messages) {
