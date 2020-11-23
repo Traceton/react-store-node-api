@@ -10,11 +10,23 @@ router.get("/", async (req, res) => {
   try {
     res.status(201).json(items);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 });
 
-// finish making this get request to get all messages by order
+router.get("/:itemId", async (req, res) => {
+  const messages = await Message.find({ itemId: req.params.itemId });
+  try {
+    if (messages) {
+      res.status(201).json(messages);
+    } else {
+      res.status(404).json("No messages yet.");
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 router.get(
   "/getPreviousMessages/:senderUserId/:recieverUserId/:itemId",
   async (req, res) => {
