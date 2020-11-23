@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const router = express();
 const Message = require("../models/message");
+const User = require("../models/user");
 
 // @route get /
 // @desc loads form
@@ -48,7 +49,7 @@ router.get(
 );
 
 router.post(
-  "/sendNewMessage/:senderUserId/:recieverUserId",
+  "/sendNewMessage/:senderUserId/:recieverUserId/:senderUsername",
   async (req, res) => {
     const message = await new Message({
       senderUserId: req.params.senderUserId,
@@ -56,6 +57,7 @@ router.post(
       itemId: req.body.itemId,
       messageBody: req.body.messageBody,
       messageId: req.body.messageId,
+      senderUsername: req.params.senderUsername,
     });
     try {
       const newMessage = message.save();

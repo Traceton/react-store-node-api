@@ -27,6 +27,10 @@ const userSchema = new mongoose.Schema({
     required: true,
     default: Date.now(),
   },
+  senderUsername: {
+    type: String,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("message", userSchema);
