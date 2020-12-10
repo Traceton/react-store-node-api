@@ -5,6 +5,7 @@ const cors = require("cors");
 const inventoryItemsRouter = require("./routes/inventoryItems");
 const usersRouter = require("./routes/users");
 const messagesRouter = require("./routes/messages");
+const votingPollsRouter = require("./routes/votingPolls");
 // test comment, force rebuild
 const mongoose = require("mongoose");
 
@@ -27,6 +28,7 @@ server.use(express.json());
 server.use("/inventoryItems", inventoryItemsRouter);
 server.use("/users", usersRouter);
 server.use("/messages", messagesRouter);
+server.use("/votingPolls", votingPollsRouter);
 
 server.listen(process.env.PORT, () => {
   console.log(
