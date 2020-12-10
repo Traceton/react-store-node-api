@@ -1,25 +1,28 @@
 const mongoose = require("mongoose");
 
-const societyUserSchema = new mongoose.Schema({
-  userId: {
-    type: String,
-    required: true,
-    default: Date.now() + Math.random(),
-  },
-  username: {
+const votingPollAnswersSchema = new mongoose.Schema({
+  pollId: {
     type: String,
     required: true,
   },
-  password: {
+  pollCategory: {
     type: String,
     required: true,
   },
-  emailAddress: {
+  pollAnswerUserId: {
     type: String,
     required: true,
   },
-  phoneNumber: {
-    type: Number,
+  pollAnswerUserUsername: {
+    type: String,
+    required: true,
+  },
+  pollAnswer: {
+    type: Array,
+    required: true,
+  },
+  isApproved: {
+    type: Boolean,
     required: true,
   },
   createdOn: {
@@ -29,4 +32,4 @@ const societyUserSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("societyUser", societyUserSchema);
+module.exports = mongoose.model("VotingPollAnswer", votingPollAnswersSchema);

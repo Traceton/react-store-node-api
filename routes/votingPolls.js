@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const router = express();
 const VotingPoll = require("../models/votingPoll");
+const VotingPollAnswer = require("../models/votingPollAnswers");
 
 // @route get /
 // @desc loads form
