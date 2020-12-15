@@ -13,10 +13,6 @@ const votingPollSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  pollType: {
-    type: String,
-    required: true,
-  },
   pollTitle: {
     type: String,
     required: true,
@@ -25,23 +21,38 @@ const votingPollSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  pollRequiredVotes: {
-    type: String,
-    required: true,
-  },
-  pollQuestion: {
-    type: String,
-    required: true,
-  },
-  pollAnswerChoices: {
-    type: Array,
-    required: true,
-  },
   createdOn: {
     type: String,
     required: true,
     default: Date.now(),
   },
+  pollType: {
+    type: String,
+    required: true,
+  },
+  requiredPollAnswersToEnd: {
+    type: String,
+    required: true
+  }
+  // single question poll below
+  singleQuestionPollQuestion: {
+    type: String,
+    required: false,
+  },
+  singleQuestionPollAnswerChoices: {
+    type: Array,
+    required: false,
+  },
+  // multiple question poll/ form below
+  multipleQuestionPollQuestions: {
+    type: Array,
+    required: false
+  },
+  multipleQuestionPollAnswerChoices: {
+    type: Array,
+    required: false
+  },
+
 });
 
 module.exports = mongoose.model("votingPoll", votingPollSchema);
