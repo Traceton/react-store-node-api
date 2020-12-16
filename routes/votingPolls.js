@@ -15,6 +15,22 @@ router.get("/", async (req, res) => {
   }
 });
 
+// get voting polls by type and category
+router.get(
+  "/pollsByTypeAndCategory/:pollType/:pollCategory",
+  async (req, res) => {
+    const pollsByTypeAndCategory = VotingPoll.find({
+      pollType: req.params.pollType,
+      pollCategory: req.params.pollCategory,
+    });
+    try {
+      res.status(201).json(pollsByTypeAndCategory);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+);
+
 // get all single question voting polls
 router.get("/singleQPolls", async (req, res) => {
   const allSingleQuestionPolls = await votingPoll.find({
