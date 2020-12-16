@@ -32,8 +32,8 @@ const votingPollSchema = new mongoose.Schema({
   },
   requiredPollAnswersToEnd: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
   // single question poll below
   singleQuestionPollQuestion: {
     type: String,
@@ -46,13 +46,12 @@ const votingPollSchema = new mongoose.Schema({
   // multiple question poll/ form below
   multipleQuestionPollQuestions: {
     type: Array,
-    required: false
+    required: false,
   },
   multipleQuestionPollAnswerChoices: {
     type: Array,
-    required: false
+    required: false,
   },
-
 });
 
 module.exports = mongoose.model("votingPoll", votingPollSchema);
