@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
 router.get(
   "/pollsByTypeAndCategory/:pollType/:pollCategory",
   async (req, res) => {
-    const pollsByTypeAndCategory = VotingPoll.find({
+    const pollsByTypeAndCategory = await VotingPoll.find({
       pollType: req.params.pollType,
       pollCategory: req.params.pollCategory,
     });
@@ -119,8 +119,9 @@ router.post("/createNewVotingPoll", async (req, res) => {
       req.body.multipleQuestionPollAnswerChoices,
   });
   try {
-    newVotingPoll.save();
-    res.status(201).json(newVotingPoll);
+    const finalNewVotingPoll = await newVotingPoll.save();
+    console.log(finalNewVotingPoll);
+    res.status(201).json(finalNewVotingPoll);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
