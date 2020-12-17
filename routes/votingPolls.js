@@ -119,6 +119,7 @@ router.post("/createNewVotingPoll", async (req, res) => {
       req.body.multipleQuestionPollAnswerChoices,
   });
   try {
+    newVotingPoll.save();
     res.status(201).json(newVotingPoll);
   } catch (error) {
     res.status(500).json({ message: error.message });
