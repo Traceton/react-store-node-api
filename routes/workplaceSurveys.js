@@ -26,22 +26,6 @@ router.get("/dropBox", async (req, res) => {
   }
 });
 
-// get drop box by dropBoxId and password
-router.get(
-  "/dropBox/getBoxByIdAndPassword/:boxId/:boxPassword",
-  async (req, res) => {
-    const dropBox = await DropBox.find({
-      dropBoxId: req.params.boxId,
-      dropBoxPassword: req.params.boxPassword,
-    });
-    try {
-      res.status(201).json(dropBox);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
-  }
-);
-
 // get drop box answers by id if password for the drop box is correct.
 router.get(
   "dropBox/getAnswersByIdAndPassword/:boxId/:boxPassword",
