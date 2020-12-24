@@ -32,7 +32,7 @@ server.use("/users", usersRouter);
 server.use("/messages", messagesRouter);
 server.use("/votingPolls", votingPollsRouter);
 server.use("/societyUsers", societyUsersRouter);
-server.use("workplaceSurveys", WorkplaceSurveyRouter);
+server.use("/workplaceSurveys", WorkplaceSurveyRouter);
 
 server.listen(process.env.PORT, () => {
   console.log(

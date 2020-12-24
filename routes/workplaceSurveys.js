@@ -28,7 +28,7 @@ router.get("/dropBox", async (req, res) => {
 
 // get drop box answers by id if password for the drop box is correct.
 router.get(
-  "dropBox/getAnswersByIdAndPassword/:boxId/:boxPassword",
+  "/dropBox/getAnswersByIdAndPassword/:boxId/:boxPassword",
   async (req, res) => {
     const dropBox = await dropBox.find({
       dropBoxId: req.params.boxId,
@@ -50,16 +50,16 @@ router.get(
 );
 
 // create new drop box
-router.post("dropBox/createNewDropBox", async (req, res) => {
-  const dropBox = await new dropBox({
+router.post("/dropBox/createNewDropBox", async (req, res) => {
+  const dropBox = await new DropBox({
     dropBoxId: req.body.dropBoxId,
     dropBoxName: req.body.dropBoxName,
     dropBoxPassword: req.body.dropBoxPassword,
     dropBoxLocation: req.body.dropBoxLocation,
   });
-
   try {
-    const newDropBox = dropBox.save();
+    const newDropBox = await dropBox.save();
+    console.log(newDropBox);
     res.status(201).json(newDropBox);
   } catch (error) {
     res.status(500).json({ message: error.message });
