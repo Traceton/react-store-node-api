@@ -5,6 +5,23 @@ const workplaceSurveyDropBoxSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  dropBoxName: {
+    type: String,
+    required: true,
+  },
+  dropBoxPassword: {
+    type: String,
+    required: true,
+  },
+  dropBoxLocation: {
+    type: String,
+    required: false,
+  },
+  createdOn: {
+    type: Date,
+    required: true,
+    default: Date.now(),
+  },
 });
 
 module.exports = mongoose.model(
