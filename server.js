@@ -7,6 +7,7 @@ const usersRouter = require("./routes/users");
 const messagesRouter = require("./routes/messages");
 const votingPollsRouter = require("./routes/votingPolls");
 const societyUsersRouter = require("./routes/societyUsers");
+const WorkplaceSurveyRouter = require("./routes/workplaceSurveys");
 // test comment, force rebuild
 const mongoose = require("mongoose");
 
@@ -31,6 +32,7 @@ server.use("/users", usersRouter);
 server.use("/messages", messagesRouter);
 server.use("/votingPolls", votingPollsRouter);
 server.use("/societyUsers", societyUsersRouter);
+server.use("workplaceSurveys", WorkplaceSurveyRouter);
 
 server.listen(process.env.PORT, () => {
   console.log(
