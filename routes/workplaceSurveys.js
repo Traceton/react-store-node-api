@@ -49,6 +49,29 @@ router.get(
   }
 );
 
+// get drop box by id if password for the drop box is correct.
+router.get(
+  "/dropBox/getDropBoxByIdAndPassword/:boxId/:boxPassword",
+  async (req, res) => {
+    const dropBox = await dropBox.find({
+      dropBoxId: req.params.boxId,
+    });
+    const answers = await DropBoxAnswer.find({
+      dropBoxId: req.params.boxId,
+    });
+
+    try {
+      if (dropBox && dropBox.dropBoxPassword === req.params.boxPassword) {
+        return res.status(201).json(dropBox);
+      } else {
+        res.status(404).json("incorrect box id or password");
+      }
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+);
+
 // create new drop box
 router.post("/dropBox/createNewDropBox", async (req, res) => {
   const dropBox = await new DropBox({
@@ -69,10 +92,11 @@ router.post("/dropBox/createNewDropBox", async (req, res) => {
 router.post("/dropBox/createNewDropBoxAnswer", async (req, res) => {
   const answer = await new DropBoxAnswer({
     dropBoxId: req.body.dropBoxId,
-    dropBoxAnswer: req.params.dropBoxAnswer,
+    dropBoxAnswer: req.body.dropBoxAnswer,
   });
   try {
     const newAnswer = await answer.save();
+    console.log(newAnswer);
     res.status(201).json(newAnswer);
   } catch (error) {
     res.status(500).json({ message: error.message });
