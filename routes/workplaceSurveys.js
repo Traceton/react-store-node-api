@@ -66,6 +66,19 @@ router.post("/dropBox/createNewDropBox", async (req, res) => {
   }
 });
 
+router.post("/dropBox/createNewDropBoxAnswer", async (req, res) => {
+  const answer = await new DropBoxAnswer({
+    dropBoxId: req.body.dropBoxId,
+    dropBoxAnswer: req.params.dropBoxAnswer,
+  });
+  try {
+    const newAnswer = await answer.save();
+    res.status(201).json(newAnswer);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // delete drop box and drop box answers using id and password
 router.delete(
   "/dropBox/deleteDropBox/:boxId/:boxPassword",
