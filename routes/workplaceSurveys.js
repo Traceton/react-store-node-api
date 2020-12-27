@@ -38,7 +38,7 @@ router.get(
     });
 
     try {
-      if (dropBox && dropBox.dropBoxPassword === req.params.boxPassword) {
+      if (dropBox[0] && dropBox[0].dropBoxPassword === req.params.boxPassword) {
         return res.status(201).json(answers);
       } else {
         res.status(404).json("incorrect box id or password");
