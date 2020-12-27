@@ -30,7 +30,7 @@ router.get("/dropBox", async (req, res) => {
 router.get(
   "/dropBox/getAnswersByIdAndPassword/:boxId/:boxPassword",
   async (req, res) => {
-    const dropBox = await dropBox.find({
+    const dropBox = await DropBox.find({
       dropBoxId: req.params.boxId,
     });
     const answers = await DropBoxAnswer.find({
@@ -53,16 +53,16 @@ router.get(
 router.get(
   "/dropBox/getDropBoxByIdAndPassword/:boxId/:boxPassword",
   async (req, res) => {
-    const dropBox = await dropBox.find({
+    let dropBox = await DropBox.find({
       dropBoxId: req.params.boxId,
     });
-    const answers = await DropBoxAnswer.find({
+    let answers = await DropBoxAnswer.find({
       dropBoxId: req.params.boxId,
     });
 
     try {
-      if (dropBox && dropBox.dropBoxPassword === req.params.boxPassword) {
-        return res.status(201).json(dropBox);
+      if (dropBox[0] && dropBox[0].dropBoxPassword === req.params.boxPassword) {
+        return res.status(201).json(dropBox[0]);
       } else {
         res.status(404).json("incorrect box id or password");
       }
