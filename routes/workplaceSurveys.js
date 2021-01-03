@@ -111,7 +111,7 @@ router.delete(
       dropBoxId: req.params.boxId,
     });
     try {
-      if (dropBox && dropBox.dropBoxPassword === req.params.boxPassword) {
+      if (dropBox[0] && dropBox[0].dropBoxPassword === req.params.boxPassword) {
         dropBox.remove();
         res.status(201).json("Drop Box Deleted");
       } else {
