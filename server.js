@@ -8,7 +8,7 @@ const messagesRouter = require("./routes/messages");
 const votingPollsRouter = require("./routes/votingPolls");
 const societyUsersRouter = require("./routes/societyUsers");
 const WorkplaceSurveyRouter = require("./routes/workplaceSurveys");
-// test comment, force rebuild
+
 const mongoose = require("mongoose");
 
 const database = mongoose.connection;
