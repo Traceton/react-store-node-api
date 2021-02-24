@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const message = require("../models/message");
 const router = express();
 
 const WorkplaceSurvey = require("../models/workplaceSurvey");
@@ -23,6 +24,23 @@ router.get("/dropBox", async (req, res) => {
     res.status(201).json(dropBoxes);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+});
+
+// check if drop box is valid by using either a code or drop box name.
+router.get("/dropBox/checkIfValid/:dropBoxLogin", async (req, res) => {
+  const correctDropBoxCode = await DropBox.find({
+    dropBoxId: req.params.dropBoxLogin,
+  });
+  const correctDropBoxName = await DropBox.find({
+    dropBoxName: req.params.dropBoxLogin,
+  });
+  try {
+    if (correctDropBoxCode || correctDropBoxName) {
+      res.status(201).json(true);
+    }
+  } catch (error) {
+    res.status(404).json({ message: error.message });
   }
 });
 
@@ -77,9 +95,11 @@ router.post("/dropBox/createNewDropBox", async (req, res) => {
   const dropBox = await new DropBox({
     dropBoxId: req.body.dropBoxId,
     dropBoxName: req.body.dropBoxName,
+    dropBoxQuestion: req.body.dropBoxQuestion,
     dropBoxPassword: req.body.dropBoxPassword,
     dropBoxLocation: req.body.dropBoxLocation,
   });
+
   try {
     const newDropBox = await dropBox.save();
     console.log(newDropBox);

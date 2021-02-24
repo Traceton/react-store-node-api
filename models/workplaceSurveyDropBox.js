@@ -9,6 +9,10 @@ const workplaceSurveyDropBoxSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  dropBoxQuestion: {
+    type: String,
+    required: true,
+  },
   dropBoxPassword: {
     type: String,
     required: true,
