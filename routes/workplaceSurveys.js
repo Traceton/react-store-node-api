@@ -27,22 +27,49 @@ router.get("/dropBox", async (req, res) => {
   }
 });
 
-// check if drop box is valid by using either a code or drop box name.
-router.get("/dropBox/checkIfValid/:dropBoxLogin", async (req, res) => {
+// Get the basic drop box info if one exists. (code, name, and question only.)
+router.get("/dropBox/getDropBoxIfValid/:dropBoxCode", async (req, res) => {
   const correctDropBoxCode = await DropBox.find({
-    dropBoxId: req.params.dropBoxLogin,
+    dropBoxId: req.params.dropBoxCode,
   });
-  const correctDropBoxName = await DropBox.find({
-    dropBoxName: req.params.dropBoxLogin,
-  });
+
+  const publicDropBoxInfo = {
+    dropBoxId: correctDropBoxCode[0].dropBoxId,
+    dropBoxName: correctDropBoxCode[0].dropBoxName,
+    dropBoxQuestion: correctDropBoxCode[0].dropBoxQuestion,
+    createdOn: correctDropBoxCode[0].createdOn,
+  };
+
   try {
-    if (correctDropBoxCode || correctDropBoxName) {
-      res.status(201).json(true);
+    if (correctDropBoxCode) {
+      res.status(201).json(publicDropBoxInfo);
     }
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
 });
+
+// check if the drop box id and password are correct.
+router.get(
+  "/dropBox/checkIfDropBoxIdAndPasswordIsValid/:boxId/:boxPassword",
+  async (req, res) => {
+    const dropBox = await DropBox.find({
+      dropBoxId: req.params.boxId,
+    });
+    try {
+      console.log(dropBox[0].dropBoxPassword);
+      if (dropBox[0] && dropBox[0].dropBoxPassword === req.params.boxPassword) {
+        // password is correct
+        return res.status(201).json(true);
+      } else {
+        // password is incorrect.
+        res.status(404).json(false);
+      }
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+);
 
 // get drop box answers by id if password for the drop box is correct.
 router.get(
@@ -72,9 +99,6 @@ router.get(
   "/dropBox/getDropBoxByIdAndPassword/:boxId/:boxPassword",
   async (req, res) => {
     let dropBox = await DropBox.find({
-      dropBoxId: req.params.boxId,
-    });
-    let answers = await DropBoxAnswer.find({
       dropBoxId: req.params.boxId,
     });
 
