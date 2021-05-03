@@ -2,6 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const message = require("../models/message");
 const router = express();
+const sgMail = require("@sendgrid/mail");
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const WorkplaceSurvey = require("../models/workplaceSurvey");
 const DropBox = require("../models/workplaceSurveyDropBox");
@@ -29,6 +31,7 @@ router.get("/dropBox", async (req, res) => {
 
 // Get the basic drop box info if one exists. (code, name, and question only.)
 router.get("/dropBox/getDropBoxIfValid/:dropBoxCode", async (req, res) => {
+  console.log(req.params.dropBoxCode);
   const correctDropBoxCode = await DropBox.find({
     dropBoxId: req.params.dropBoxCode,
   });
@@ -43,6 +46,8 @@ router.get("/dropBox/getDropBoxIfValid/:dropBoxCode", async (req, res) => {
   try {
     if (correctDropBoxCode) {
       res.status(201).json(publicDropBoxInfo);
+    } else {
+      res.status(404).json(false);
     }
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -113,6 +118,29 @@ router.get(
     }
   }
 );
+
+router.post("/dropBox/sendUserDropBoxEmail", (req, res) => {
+  try {
+    const msg = {
+      to: req.body.to,
+      from: "traceton.timmerman@gmail.com",
+      subject: req.body.subject,
+      text: req.body.text,
+    };
+    sgMail
+      .send(msg)
+      .then(() => {
+        console.log("Email sent");
+        return res.status(200);
+      })
+      .catch((error) => {
+        console.error(error);
+        return res.status(200);
+      });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
 // create new drop box
 router.post("/dropBox/createNewDropBox", async (req, res) => {
