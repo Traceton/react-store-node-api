@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const workplaceSurveyDropBoxSchema = new mongoose.Schema({
+const muterPollDropBoxSchema = new mongoose.Schema({
   dropBoxId: {
     type: String,
     required: true,
@@ -28,7 +28,4 @@ const workplaceSurveyDropBoxSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model(
-  "workplaceSurveyDropBox",
-  workplaceSurveyDropBoxSchema
-);
+module.exports = mongoose.model("muterPollDropBox", muterPollDropBoxSchema);

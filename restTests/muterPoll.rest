@@ -1,0 +1,84 @@
+
+# Create a new drop box
+POST http://localhost:3001/muterPolls/dropBox/createNewDropBox
+Content-Type: application/json
+
+{
+    "dropBoxId": "53987",
+    "dropBoxName": "Test drop box",
+    "dropBoxQuestion": "created in rest file, does it work?",
+    "dropBoxPassword": "Tester",
+    "dropBoxLocation": "Knoxville, tn"
+}
+
+
+###
+
+
+# Create a new drop box answer
+POST http://localhost:3001/muterPolls/dropBox/createNewDropBoxAnswer
+Content-Type: application/json
+
+{
+    "dropBoxId": "53987",
+    "dropBoxAnswer": "Test drop box Answer from rest file"
+}
+
+
+###
+
+
+# Delete drop box and drop box answers with id and password
+DELETE  http://localhost:3001/muterPolls/dropBox/deleteDropBox/:boxId/:boxPassword
+
+
+
+###
+
+
+
+POST http://localhost:3001/muterPolls/dropBox/sendUserDropBoxEmail
+Content-Type: application/json
+
+{
+    "to": "traceton.timmerman@gmail.com",
+    "subject": "New Muter Poll Drop Box",
+    "text": "You have created a new muter poll drop box with the id : 345435"
+}
+
+
+###
+
+# gets all workplace surveys
+GET http://localhost:3001/muterPolls
+
+
+
+###
+
+# gets all drop boxes
+GET http://localhost:3001/muterPolls/dropBox
+
+
+###
+
+# Get the basic drop box info if one exists. (code, name, and question only.)
+GET http://localhost:3001/muterPolls/dropBox/getDropBoxIfValid/:dropBoxCode
+
+
+###
+
+# check if the drop box id and password are correct.
+GET http://localhost:3001/muterPolls/dropBox/checkIfDropBoxIdAndPasswordIsValid/:boxId/:boxPassword
+
+
+###
+
+# get drop box answers by id if password for the drop box is correct.
+GET http://localhost:3001/muterPolls/dropBox/getAnswersByIdAndPassword/:boxId/:boxPassword
+
+
+###
+
+# get drop box by id if password for the drop box is correct.
+GET http://localhost:3001/muterPolls/dropBox/getDropBoxByIdAndPassword/:boxId/:boxPassword

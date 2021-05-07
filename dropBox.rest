@@ -1,8 +1,0 @@
-POST http://localhost:3001/workplaceSurveys/dropBox/sendUserDropBoxEmail
-Content-Type: application/json
-
-{
-    "to": "traceton.timmerman@gmail.com",
-    "subject": "New Muter Poll Drop Box",
-    "text": "You have created a new muter poll drop box with the id : 345435"
-}

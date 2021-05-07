@@ -6,16 +6,24 @@ const sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const WorkplaceSurvey = require("../models/workplaceSurvey");
-const DropBox = require("../models/workplaceSurveyDropBox");
-const DropBoxAnswer = require("../models/workplaceSurveyDropBoxAnswer");
+const DropBox = require("../models/muterPollDropBox");
+const DropBoxAnswer = require("../models/muterPollDropBoxAnswer");
 
 // get all workplace surveys
 router.get("/", async (req, res) => {
   const surveys = await WorkplaceSurvey.find();
   try {
-    res.status(201).json(surveys);
+    res.status(201).json({
+      message_type: "success",
+      message: "workplace surveys found",
+      surveys: surveys,
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message_type: "error",
+      message: "workplace surveys not found",
+      error: error,
+    });
   }
 });
 
@@ -23,9 +31,17 @@ router.get("/", async (req, res) => {
 router.get("/dropBox", async (req, res) => {
   const dropBoxes = await DropBox.find();
   try {
-    res.status(201).json(dropBoxes);
+    res.status(201).json({
+      message_type: "success",
+      message: "dropBoxes found",
+      dropBoxes: dropBoxes,
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message_type: "error",
+      message: "dropBoxes not found",
+      error: error,
+    });
   }
 });
 
@@ -45,12 +61,23 @@ router.get("/dropBox/getDropBoxIfValid/:dropBoxCode", async (req, res) => {
 
   try {
     if (correctDropBoxCode) {
-      res.status(201).json(publicDropBoxInfo);
+      res.status(201).json({
+        message_type: "success",
+        message: "dropBox found",
+        publicDropBoxInfo: publicDropBoxInfo,
+      });
     } else {
-      res.status(404).json(false);
+      res.status(404).json({
+        message_type: "error",
+        message: "drop box does not exist",
+      });
     }
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(404).json({
+      message_type: "error",
+      message: "dropBox not found",
+      error: error,
+    });
   }
 });
 
@@ -65,13 +92,24 @@ router.get(
       console.log(dropBox[0].dropBoxPassword);
       if (dropBox[0] && dropBox[0].dropBoxPassword === req.params.boxPassword) {
         // password is correct
-        return res.status(201).json(true);
+        return res.status(201).json({
+          message_type: "success",
+          message: "dropBox id and password are correct",
+          is_correct: true,
+        });
       } else {
         // password is incorrect.
-        res.status(404).json(false);
+        res.status(404).json({
+          message_type: "error",
+          message: "dropBox id or password incorrect",
+        });
       }
     } catch (error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({
+        message_type: "error",
+        message: "dropBox id or password incorrect",
+        error: error,
+      });
     }
   }
 );
@@ -89,12 +127,23 @@ router.get(
 
     try {
       if (dropBox[0] && dropBox[0].dropBoxPassword === req.params.boxPassword) {
-        return res.status(201).json(answers);
+        return res.status(201).json({
+          message_type: "success",
+          message: "dropBox answers found",
+          answers: answers,
+        });
       } else {
-        res.status(404).json("incorrect box id or password");
+        res.status(404).json({
+          message_type: "error",
+          message: "dropBox id or password incorrect",
+        });
       }
     } catch (error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({
+        message_type: "error",
+        message: "Could not get drop box answers",
+        error: error,
+      });
     }
   }
 );
@@ -109,12 +158,23 @@ router.get(
 
     try {
       if (dropBox[0] && dropBox[0].dropBoxPassword === req.params.boxPassword) {
-        return res.status(201).json(dropBox[0]);
+        return res.status(201).json({
+          message_type: "success",
+          message: "dropBox found",
+          dropBox: dropBox[0],
+        });
       } else {
-        res.status(404).json("incorrect box id or password");
+        res.status(404).json({
+          message_type: "error",
+          message: "dropBox id or password incorrect",
+        });
       }
     } catch (error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({
+        message_type: "error",
+        message: "Could not get drop box answers",
+        error: error,
+      });
     }
   }
 );
@@ -131,14 +191,25 @@ router.post("/dropBox/sendUserDropBoxEmail", (req, res) => {
       .send(msg)
       .then(() => {
         console.log("Email sent");
-        return res.status(200);
+        return res.status(200).json({
+          message_type: "success",
+          message: "Drop Box email send",
+        });
       })
       .catch((error) => {
         console.error(error);
-        return res.status(200);
+        return res.status(200).json({
+          message_type: "error",
+          message: "Could not send drop box email",
+          error: error,
+        });
       });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message_type: "error",
+      message: "Could not send drop box email",
+      error: error,
+    });
   }
 });
 
@@ -155,9 +226,17 @@ router.post("/dropBox/createNewDropBox", async (req, res) => {
   try {
     const newDropBox = await dropBox.save();
     console.log(newDropBox);
-    res.status(201).json(newDropBox);
+    res.status(201).json({
+      message_type: "success",
+      message: "dropBox created",
+      newDropBox: newDropBox,
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message_type: "error",
+      message: "Could not create new drop box",
+      error: error,
+    });
   }
 });
 
@@ -169,9 +248,17 @@ router.post("/dropBox/createNewDropBoxAnswer", async (req, res) => {
   try {
     const newAnswer = await answer.save();
     console.log(newAnswer);
-    res.status(201).json(newAnswer);
+    res.status(201).json({
+      message_type: "success",
+      message: "dropBox answer created",
+      newAnswer: newAnswer,
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message_type: "error",
+      message: "Could not create new drop box answer",
+      error: error,
+    });
   }
 });
 
@@ -185,12 +272,22 @@ router.delete(
     try {
       if (dropBox[0] && dropBox[0].dropBoxPassword === req.params.boxPassword) {
         dropBox.remove();
-        res.status(201).json("Drop Box Deleted");
+        res.status(201).json({
+          message_type: "success",
+          message: "dropBox and drop box answers deleted",
+        });
       } else {
-        res.status(404).json("incorrect box id or password");
+        res.status(404).json({
+          message_type: "error",
+          message: "dropBox id or password incorrect",
+        });
       }
     } catch (error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({
+        message_type: "error",
+        message: "Could not create new drop box answer",
+        error: error,
+      });
     }
   }
 );
