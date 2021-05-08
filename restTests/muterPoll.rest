@@ -21,7 +21,7 @@ Content-Type: application/json
 
 {
     "dropBoxId": "53987",
-    "dropBoxAnswer": "Test drop box Answer from rest file"
+    "dropBoxAnswer": "Test drop box Answer from rest file 2"
 }
 
 
@@ -63,22 +63,22 @@ GET http://localhost:3001/muterPolls/dropBox
 ###
 
 # Get the basic drop box info if one exists. (code, name, and question only.)
-GET http://localhost:3001/muterPolls/dropBox/getDropBoxIfValid/:dropBoxCode
+GET http://localhost:3001/muterPolls/dropBox/getDropBoxIfValid/53987
 
 
 ###
 
 # check if the drop box id and password are correct.
-GET http://localhost:3001/muterPolls/dropBox/checkIfDropBoxIdAndPasswordIsValid/:boxId/:boxPassword
+GET http://localhost:3001/muterPolls/dropBox/checkIfDropBoxIdAndPasswordIsValid/53987/Tester
 
 
 ###
 
 # get drop box answers by id if password for the drop box is correct.
-GET http://localhost:3001/muterPolls/dropBox/getAnswersByIdAndPassword/:boxId/:boxPassword
+GET http://localhost:3001/muterPolls/dropBox/getAnswersByIdAndPassword/53987/Tester
 
 
 ###
 
 # get drop box by id if password for the drop box is correct.
-GET http://localhost:3001/muterPolls/dropBox/getDropBoxByIdAndPassword/:boxId/:boxPassword
+GET http://localhost:3001/muterPolls/dropBox/getDropBoxByIdAndPassword/53987/Tester

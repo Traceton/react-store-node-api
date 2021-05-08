@@ -22,7 +22,6 @@ router.get("/", async (req, res) => {
     res.status(500).json({
       message_type: "error",
       message: "workplace surveys not found",
-      error: error,
     });
   }
 });
@@ -40,7 +39,6 @@ router.get("/dropBox", async (req, res) => {
     res.status(500).json({
       message_type: "error",
       message: "dropBoxes not found",
-      error: error,
     });
   }
 });
@@ -48,35 +46,34 @@ router.get("/dropBox", async (req, res) => {
 // Get the basic drop box info if one exists. (code, name, and question only.)
 router.get("/dropBox/getDropBoxIfValid/:dropBoxCode", async (req, res) => {
   console.log(req.params.dropBoxCode);
+
   const correctDropBoxCode = await DropBox.find({
     dropBoxId: req.params.dropBoxCode,
   });
 
-  const publicDropBoxInfo = {
-    dropBoxId: correctDropBoxCode[0].dropBoxId,
-    dropBoxName: correctDropBoxCode[0].dropBoxName,
-    dropBoxQuestion: correctDropBoxCode[0].dropBoxQuestion,
-    createdOn: correctDropBoxCode[0].createdOn,
-  };
-
-  try {
-    if (correctDropBoxCode) {
+  if (correctDropBoxCode[0]) {
+    const publicDropBoxInfo = {
+      dropBoxId: correctDropBoxCode[0].dropBoxId,
+      dropBoxName: correctDropBoxCode[0].dropBoxName,
+      dropBoxQuestion: correctDropBoxCode[0].dropBoxQuestion,
+      createdOn: correctDropBoxCode[0].createdOn,
+    };
+    try {
       res.status(201).json({
         message_type: "success",
         message: "dropBox found",
         publicDropBoxInfo: publicDropBoxInfo,
       });
-    } else {
-      res.status(404).json({
+    } catch (error) {
+      res.status(500).json({
         message_type: "error",
-        message: "drop box does not exist",
+        message: "dropBox not found",
       });
     }
-  } catch (error) {
+  } else {
     res.status(404).json({
-      message_type: "error",
-      message: "dropBox not found",
-      error: error,
+      message_type: "warning",
+      message: "drop box does not exist",
     });
   }
 });
@@ -92,6 +89,7 @@ router.get(
       console.log(dropBox[0].dropBoxPassword);
       if (dropBox[0] && dropBox[0].dropBoxPassword === req.params.boxPassword) {
         // password is correct
+
         return res.status(201).json({
           message_type: "success",
           message: "dropBox id and password are correct",
@@ -108,7 +106,6 @@ router.get(
       res.status(500).json({
         message_type: "error",
         message: "dropBox id or password incorrect",
-        error: error,
       });
     }
   }
@@ -142,7 +139,6 @@ router.get(
       res.status(500).json({
         message_type: "error",
         message: "Could not get drop box answers",
-        error: error,
       });
     }
   }
@@ -173,7 +169,6 @@ router.get(
       res.status(500).json({
         message_type: "error",
         message: "Could not get drop box answers",
-        error: error,
       });
     }
   }
@@ -208,7 +203,6 @@ router.post("/dropBox/sendUserDropBoxEmail", (req, res) => {
     res.status(500).json({
       message_type: "error",
       message: "Could not send drop box email",
-      error: error,
     });
   }
 });
@@ -235,7 +229,6 @@ router.post("/dropBox/createNewDropBox", async (req, res) => {
     res.status(500).json({
       message_type: "error",
       message: "Could not create new drop box",
-      error: error,
     });
   }
 });
@@ -257,7 +250,6 @@ router.post("/dropBox/createNewDropBoxAnswer", async (req, res) => {
     res.status(500).json({
       message_type: "error",
       message: "Could not create new drop box answer",
-      error: error,
     });
   }
 });
@@ -286,7 +278,6 @@ router.delete(
       res.status(500).json({
         message_type: "error",
         message: "Could not create new drop box answer",
-        error: error,
       });
     }
   }
